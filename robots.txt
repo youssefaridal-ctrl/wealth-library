@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://youssefaridal-ctrl.github.io/wealth-library/sitemap.xml
