@@ -205,8 +205,32 @@
     });
   }
 
+  /* ===== قائمة الجوال (همبرغر) ===== */
+  function setupMobileNav(){
+    var wrap = document.querySelector('.topnav .wrap');
+    var links = document.querySelector('.topnav .nav-links');
+    if(!wrap || !links || wrap.querySelector('.nav-toggle')) return;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'nav-toggle';
+    btn.setAttribute('aria-label', 'فتح القائمة');
+    btn.innerHTML = '<span></span><span></span><span></span>';
+    btn.addEventListener('click', function(){
+      links.classList.toggle('open');
+      btn.classList.toggle('active');
+    });
+    wrap.insertBefore(btn, links);
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        links.classList.remove('open');
+        btn.classList.remove('active');
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function(){
     renderAuthSlot();
     renderReadStatus();
+    setupMobileNav();
   });
 })();

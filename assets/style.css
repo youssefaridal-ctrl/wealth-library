@@ -280,3 +280,28 @@ footer span{display:block;margin-top:6px;font-size:.76rem;color:var(--gold-dim);
   .acc-meta{display:none}
   .mm-center{width:175px;height:175px;font-size:1.1rem}
 }
+
+/* ===== Mobile/tablet experience pass ===== */
+@media (max-width:680px){
+  .wrap{padding:0 16px}
+  header{padding:34px 0 12px}
+  header h1{font-size:clamp(1.9rem,8vw,2.6rem)}
+  .sub{font-size:.92rem}
+  .searchbar input{padding:13px 48px 13px 18px;font-size:.95rem}
+  .s-icon{right:16px}
+  .ornament::before,.ornament::after{width:60px}
+  .cat-head h3{font-size:1.2rem}
+  .idx-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  .idx-card{padding:14px 14px 12px}
+  .sec-sep h2{font-size:1.5rem}
+  footer{padding:36px 16px 44px}
+  .cover{width:190px}
+  .cover-title{font-size:1.35rem}
+  .book-info h2{font-size:clamp(1.5rem,7vw,2rem)}
+  .chip{padding:7px 13px;font-size:.8rem}
+}
+@media (max-width:480px){
+  .booknav{flex-direction:column}
+  .booknav a.next,.booknav a.prev{text-align:center}
+  .status-toggle button{flex:1;text-align:center}
+}
