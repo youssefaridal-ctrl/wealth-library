@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قراءاتي — مكتبة المال والثروة</title>
+<meta name="description" content="تابع تقدّمك في قراءة كتب مكتبة المال والثروة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/extra.css">
+</head>
+<body class="static-page" data-root="">
+
+<nav class="topnav"><div class="wrap">
+  <a class="brand" href="index.html"><span class="dotmark"></span>مكتبة <em>المال والثروة</em></a>
+  <ul class="nav-links">
+    <li><a href="about.html">من نحن</a></li>
+    <li><a href="services.html">خدماتنا</a></li>
+    <li><a href="blog.html">المقالات</a></li>
+    <li><a href="contact.html">تواصل معنا</a></li>
+  </ul>
+  <span id="authSlot"></span>
+</div></nav>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <div class="badge">متابعة القراءة</div>
+    <h1>قراءاتي</h1>
+    <p>هنا تجد كل الكتب التي بدأت قراءتها أو أنهيتها.</p>
+  </div>
+
+  <div class="read-stats">
+    <div class="read-stat"><b id="statDone">0</b><span>كتاب مُنهى</span></div>
+    <div class="read-stat"><b id="statReading">0</b><span>قيد القراءة</span></div>
+    <div class="read-stat"><b id="statTotal">100</b><span>إجمالي المكتبة</span></div>
+  </div>
+
+  <div id="readsContainer"></div>
+
+</main>
+
+<footer>
+  <div class="foot-line"></div>
+  <div class="footer-links">
+    <a href="index.html">الفهرس</a>
+    <a href="about.html">من نحن</a>
+    <a href="services.html">خدماتنا</a>
+    <a href="blog.html">المقالات</a>
+    <a href="contact.html">تواصل معنا</a>
+    <a href="privacy.html">سياسة الخصوصية</a>
+    <a href="terms.html">شروط الاستخدام</a>
+  </div>
+  مكتبة المال والثروة — أفضل 100 كتاب في المال وبناء الثروة
+  <span>الإصدار 1 · 2026</span>
+</footer>
+
+<script src="assets/auth.js"></script>
+<script>
+(function(){
+  if(!WL.currentUser()){ location.href = 'account.html'; return; }
+
+  var s = WL.stats();
+  document.getElementById('statDone').textContent = s.done;
+  document.getElementById('statReading').textContent = s.reading;
+  document.getElementById('statTotal').textContent = s.total;
+
+  var progress = WL.getProgress();
+  var ids = Object.keys(progress);
+  var box = document.getElementById('readsContainer');
+
+  if(ids.length === 0){
+    box.innerHTML = '<div class="empty-reads">لم تبدأ أي كتاب بعد. <a href="index.html">تصفّح الفهرس الكامل →</a></div>';
+    return;
+  }
+
+  var grid = document.createElement('div');
+  grid.className = 'reads-grid';
+
+  ids.forEach(function(id){
+    var book = WL.BOOKS.find(function(b){ return String(b.id) === String(id); });
+    if(!book) return;
+    var st = progress[id].status;
+    var a = document.createElement('a');
+    a.className = 'idx-card done';
+    a.href = book.href;
+    a.innerHTML =
+      '<span class="idx-num">' + String(book.id).padStart(2,'0') + '</span>' +
+      '<div class="idx-t">' + book.title + '</div>' +
+      '<div class="idx-a">' + book.author + '</div>' +
+      '<span class="idx-badge">' + (st === 'done' ? 'مُنهى ✓' : 'قيد القراءة') + '</span>';
+    grid.appendChild(a);
+  });
+
+  box.appendChild(grid);
+})();
+</script>
+
+</body>
+</html>

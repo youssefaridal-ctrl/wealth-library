@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="stylesheet" href="../assets/extra.css">
 </head>
-<body class="book-page">
+<body class="book-page" data-root="../">
 
 <nav class="topnav"><div class="wrap">
   <a class="brand" href="../index.html"><span class="dotmark"></span>مكتبة <em>المال والثروة</em></a>
@@ -20,6 +20,7 @@
     <li><a href="../blog.html">المقالات</a></li>
     <li><a href="../contact.html">تواصل معنا</a></li>
   </ul>
+  <span id="authSlot"></span>
   <a class="back" href="../index.html">↑ الفهرس الكامل</a>
 </div></nav>
 
@@ -59,6 +60,7 @@
             <button class="openAll">افتح كل الأقسام</button>
             <button class="closeAll">أغلق الكل</button>
           </div>
+          <div class="status-toggle" id="readStatus" data-book-id="99"></div>
         </div>
       </div>
 
@@ -200,5 +202,6 @@
 })();
 </script>
 
+<script src="../assets/auth.js"></script>
 </body>
 </html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — مكتبة المال والثروة</title>
+<meta name="description" content="سجّل الدخول أو أنشئ حساباً في مكتبة المال والثروة لمتابعة قراءاتك وحفظ تقدّمك في الكتب.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/extra.css">
+</head>
+<body class="static-page" data-root="">
+
+<nav class="topnav"><div class="wrap">
+  <a class="brand" href="index.html"><span class="dotmark"></span>مكتبة <em>المال والثروة</em></a>
+  <ul class="nav-links">
+    <li><a href="about.html">من نحن</a></li>
+    <li><a href="services.html">خدماتنا</a></li>
+    <li><a href="blog.html">المقالات</a></li>
+    <li><a href="contact.html">تواصل معنا</a></li>
+  </ul>
+  <span id="authSlot"></span>
+</div></nav>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <div class="badge">حسابك الشخصي</div>
+    <h1>تسجيل الدخول</h1>
+    <p>أنشئ حساباً مجانياً لمتابعة الكتب التي تقرأها وحفظ تقدّمك. ملاحظة: الحساب محفوظ في متصفحك الحالي فقط.</p>
+  </div>
+
+  <div class="auth-tabs">
+    <button type="button" class="auth-tab active" id="tabLogin">تسجيل الدخول</button>
+    <button type="button" class="auth-tab" id="tabRegister">إنشاء حساب جديد</button>
+  </div>
+
+  <div class="auth-form">
+
+    <div class="auth-panel show" id="panelLogin">
+      <form class="static-card cform" id="loginForm">
+        <label for="lUser">اسم المستخدم</label>
+        <input type="text" id="lUser" autocomplete="username" required>
+        <label for="lPass">كلمة المرور</label>
+        <input type="password" id="lPass" autocomplete="current-password" required>
+        <button type="submit">دخول</button>
+      </form>
+    </div>
+
+    <div class="auth-panel" id="panelRegister">
+      <form class="static-card cform" id="registerForm">
+        <label for="rUser">اسم المستخدم</label>
+        <input type="text" id="rUser" autocomplete="username" required>
+        <label for="rPass">كلمة المرور (4 أحرف على الأقل)</label>
+        <input type="password" id="rPass" autocomplete="new-password" required>
+        <button type="submit">إنشاء الحساب</button>
+      </form>
+    </div>
+
+    <div class="auth-msg" id="authMsg"></div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="foot-line"></div>
+  <div class="footer-links">
+    <a href="index.html">الفهرس</a>
+    <a href="about.html">من نحن</a>
+    <a href="services.html">خدماتنا</a>
+    <a href="blog.html">المقالات</a>
+    <a href="contact.html">تواصل معنا</a>
+    <a href="privacy.html">سياسة الخصوصية</a>
+    <a href="terms.html">شروط الاستخدام</a>
+  </div>
+  مكتبة المال والثروة — أفضل 100 كتاب في المال وبناء الثروة
+  <span>الإصدار 1 · 2026</span>
+</footer>
+
+<script src="assets/auth.js"></script>
+<script>
+(function(){
+  if(WL.currentUser()){ location.href = 'myreads.html'; return; }
+
+  var tabLogin = document.getElementById('tabLogin');
+  var tabRegister = document.getElementById('tabRegister');
+  var panelLogin = document.getElementById('panelLogin');
+  var panelRegister = document.getElementById('panelRegister');
+  var msg = document.getElementById('authMsg');
+
+  function showMsg(text, ok){
+    msg.textContent = text;
+    msg.className = 'auth-msg ' + (ok ? 'ok' : 'err');
+  }
+
+  tabLogin.addEventListener('click', function(){
+    tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+    panelLogin.classList.add('show'); panelRegister.classList.remove('show');
+    showMsg('', true);
+  });
+  tabRegister.addEventListener('click', function(){
+    tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+    panelRegister.classList.add('show'); panelLogin.classList.remove('show');
+    showMsg('', true);
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var r = WL.login(document.getElementById('lUser').value, document.getElementById('lPass').value);
+    if(r.ok){ location.href = 'myreads.html'; } else { showMsg(r.msg, false); }
+  });
+
+  document.getElementById('registerForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var r = WL.register(document.getElementById('rUser').value, document.getElementById('rPass').value);
+    if(r.ok){ location.href = 'myreads.html'; } else { showMsg(r.msg, false); }
+  });
+})();
+</script>
+
+</body>
+</html>

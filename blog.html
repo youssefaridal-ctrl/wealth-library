@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/extra.css">
 </head>
-<body class="static-page">
+<body class="static-page" data-root="">
 
 <nav class="topnav"><div class="wrap">
   <a class="brand" href="index.html"><span class="dotmark"></span>مكتبة <em>المال والثروة</em></a>
@@ -21,6 +21,7 @@
     <li><a href="blog.html" class="active">المقالات</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
+  <span id="authSlot"></span>
   <a class="back" href="index.html">↑ الفهرس الكامل</a>
 </div></nav>
 
@@ -32,35 +33,177 @@
     <p>قراءات قصيرة حول المال والاستثمار وعلم نفس الثروة، مستوحاة من أهم الأفكار التي تطرحها كتب المكتبة.</p>
   </div>
 
+  <div class="sec-sep"><h2>سلسلة: من موظف بسيط إلى استقرار مالي</h2></div>
+  <p class="idx-note">سبعة أجزاء متسلسلة لكل من يعمل طوال اليوم بأجر متواضع ويريد بناء استقرار مالي حقيقي، خطوة بخطوة.</p>
+
   <div class="blog-grid">
 
-    <article class="blog-card">
+    <a class="blog-card" href="blog/employee-to-stability-1.html">
+      <div class="b-cat">الجزء 1 من 7</div>
+      <h3>راتبك الصغير ليس قدراً، بل نقطة انطلاق</h3>
+      <p>تعمل طوال اليوم وتشعر أن الاستقرار المالي حكر على غيرك؟ هنا تبدأ القصة الحقيقية.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/employee-to-stability-2.html">
+      <div class="b-cat">الجزء 2 من 7</div>
+      <h3>أين يذهب راتبك فعلاً؟</h3>
+      <p>قبل البحث عن دخل إضافي، اكتشف أولاً أين يتسرّب راتبك الحالي بصمت.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/employee-to-stability-3.html">
+      <div class="b-cat">الجزء 3 من 7</div>
+      <h3>صندوق الطوارئ بأقل الإمكانيات</h3>
+      <p>لا تحتاج إلى آلاف الدولارات لتبدأ حاجز أمان مالي حقيقي.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/employee-to-stability-4.html">
+      <div class="b-cat">الجزء 4 من 7</div>
+      <h3>ترتيب سداد الديون بذكاء</h3>
+      <p>ليست كل الديون متساوية، والترتيب الخاطئ يكلّفك وقتاً ومالاً إضافياً.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/employee-to-stability-5.html">
+      <div class="b-cat">الجزء 5 من 7</div>
+      <h3>زيادة دخلك دون ترك وظيفتك</h3>
+      <p>طرق واقعية لبناء دخل إضافي يتناسب مع وقتك المحدود كموظف.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/employee-to-stability-6.html">
+      <div class="b-cat">الجزء 6 من 7</div>
+      <h3>الاستثمار بمبالغ صغيرة</h3>
+      <p>تظن أن الاستثمار لأصحاب الفائض الكبير؟ إليك كيف يبدأ من مبالغ متواضعة جداً.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/employee-to-stability-7.html">
+      <div class="b-cat">الجزء 7 من 7 · الأخير</div>
+      <h3>الخطة الكاملة: من موظف بسيط إلى استقرار مالي</h3>
+      <p>كل الخطوات السابقة مجمَّعة في خريطة طريق واحدة واضحة يمكنك البدء فيها اليوم.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
+
+  </div>
+
+  <div class="sec-sep"><h2>كل المقالات</h2></div>
+
+  <div class="blog-grid">
+
+    <a class="blog-card" href="blog/kasb-vs-ihtifaz.html">
       <div class="b-cat">عقلية الثروة</div>
       <h3>الفرق بين كسب المال والاحتفاظ به</h3>
-      <p>كثيرون يجيدون كسب المال لكنهم يفقدونه بسرعة. الكتب الكبرى في هذا المجال تتفق على أن الثروة الحقيقية مسألة سلوك وانضباط أكثر من كونها مسألة دخل مرتفع — وهذا ما تستعرضه بعمق ملخصات كتب مثل "السيكولوجية المالية" و"أغنى رجل في بابل" في مكتبتنا.</p>
-      <div class="b-meta">5 دقائق قراءة</div>
-    </article>
+      <p>كثيرون يجيدون كسب المال لكنهم يفقدونه بسرعة. الكتب الكبرى في هذا المجال تتفق على أن الثروة الحقيقية مسألة سلوك وانضباط أكثر من كونها مسألة دخل مرتفع.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
 
-    <article class="blog-card">
+    <a class="blog-card" href="blog/emotions-vs-logic.html">
       <div class="b-cat">علم نفس المال</div>
       <h3>لماذا تتحكّم المشاعر في قراراتنا المالية أكثر من المنطق</h3>
-      <p>القرارات المالية نادرًا ما تكون عقلانية بالكامل. الخوف والطمع والمقارنة الاجتماعية تشكّل سلوكنا المالي بقدر يفوق الأرقام والحسابات — فكرة محورية تتكرر في عدة كتب من فئة "علم نفس المال" في المكتبة.</p>
-      <div class="b-meta">6 دقائق قراءة</div>
-    </article>
+      <p>القرارات المالية نادرًا ما تكون عقلانية بالكامل. الخوف والطمع والمقارنة الاجتماعية تشكّل سلوكنا المالي بقدر يفوق الأرقام والحسابات.</p>
+      <div class="b-meta">8 دقائق قراءة</div>
+    </a>
 
-    <article class="blog-card">
+    <a class="blog-card" href="blog/long-term-investing.html">
       <div class="b-cat">الاستثمار والأسواق</div>
       <h3>الاستثمار طويل الأجل ليس مملًا — إنه فعّال</h3>
-      <p>أغلب القراء يبحثون عن "السر السريع" للثراء من الأسواق، بينما تؤكد كتب الاستثمار الكلاسيكية أن الصبر والانتظام هما الفارق الحقيقي بين المستثمر الناجح والمضارب الخاسر على المدى الطويل.</p>
-      <div class="b-meta">7 دقائق قراءة</div>
-    </article>
+      <p>أغلب القراء يبحثون عن "السر السريع" للثراء من الأسواق، بينما تؤكد كتب الاستثمار الكلاسيكية أن الصبر والانتظام هما الفارق الحقيقي.</p>
+      <div class="b-meta">9 دقائق قراءة</div>
+    </a>
 
-    <article class="blog-card">
+    <a class="blog-card" href="blog/financial-freedom-lifestyle.html">
       <div class="b-cat">الحرية المالية</div>
       <h3>الحرية المالية ليست رقمًا، بل أسلوب حياة</h3>
       <p>تربط كثير من الكتب الحرية المالية برقم معيّن في الحساب البنكي، بينما تشير ملخصاتنا إلى أن الحرية المالية الحقيقية تبدأ من تقليص الحاجة قبل زيادة الدخل.</p>
-      <div class="b-meta">5 دقائق قراءة</div>
-    </article>
+      <div class="b-meta">8 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/daily-habits-build-wealth.html">
+      <div class="b-cat">عادات ومهارات</div>
+      <h3>العادات المالية اليومية التي تبني الثروة بصمت</h3>
+      <p>الثروة لا تُبنى بقرار واحد كبير، بل بعادات صغيرة متكررة تتراكم بفعل الفائدة المركّبة عبر السنوات.</p>
+      <div class="b-meta">8 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/cognitive-biases-investing.html">
+      <div class="b-cat">علم نفس المال</div>
+      <h3>الانحيازات النفسية التي تخدعك في كل قرار استثماري</h3>
+      <p>عقلك يخدعك في الاستثمار بطرق متوقعة ومتكررة، حسب أبحاث الاقتصاد السلوكي الحائزة على جائزة نوبل.</p>
+      <div class="b-meta">9 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/startup-from-zero.html">
+      <div class="b-cat">ريادة الأعمال</div>
+      <h3>ريادة الأعمال: من الصفر إلى أول دولار حقيقي</h3>
+      <p>معظم المشاريع الناشئة تفشل لنقص التحقق من الفكرة قبل الإنفاق، لا لنقص الفكرة نفسها.</p>
+      <div class="b-meta">8 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/real-estate-investing-beginners.html">
+      <div class="b-cat">الاستثمار العقاري</div>
+      <h3>الاستثمار العقاري للمبتدئين: من أين تبدأ فعلاً؟</h3>
+      <p>الاستثمار العقاري أحد أقدم طرق بناء الثروة، لكنه ليس بالبساطة التي تصوّرها برامج التلفزيون.</p>
+      <div class="b-meta">9 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/black-swan-preparation.html">
+      <div class="b-cat">الاقتصاد والأزمات</div>
+      <h3>البجعات السوداء: كيف تستعد لما لا يمكن التنبؤ به؟</h3>
+      <p>الأزمات الكبرى التي تغيّر مسار الأسواق تأتي دائماً من حدث لم يتوقعه أحد. كيف تستعد لها؟</p>
+      <div class="b-meta">9 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/deep-work-distraction-age.html">
+      <div class="b-cat">مهارات ودخل</div>
+      <h3>فن العمل العميق في عصر التشتت المستمر</h3>
+      <p>القدرة على التركيز العميق دون تشتت أصبحت مهارة نادرة وقيّمة اقتصادياً في سوق العمل الحالي.</p>
+      <div class="b-meta">8 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/why-your-paycheck-disappears.html">
+      <div class="b-cat">حالتك المالية</div>
+      <h3>لماذا راتبك يرتفع وحسابك يبقى فاضياً دائماً؟</h3>
+      <p>تكسب أكثر من قبل، ومع ذلك لا يتبقى لك شيء آخر الشهر؟ هذه الظاهرة لها اسم وسبب واضح، ولها حل عملي.</p>
+      <div class="b-meta">6 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/three-month-test.html">
+      <div class="b-cat">اختبار سريع</div>
+      <h3>اختبار الثلاثة أشهر: ماذا لو توقف دخلك غداً؟</h3>
+      <p>سؤال واحد، إجابة صادقة، وستعرف عن وضعك المالي أكثر مما يخبرك به رقم راتبك.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/living-beyond-income-signs.html">
+      <div class="b-cat">تشخيص سريع</div>
+      <h3>7 علامات أنك تعيش فوق مستوى دخلك دون أن تشعر</h3>
+      <p>لا أحد يقرر "سأنفق أكثر من دخلي اليوم". الأمر يحدث ببطء، وبقرارات تبدو كلها معقولة على حدة.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/five-questions-financial-path.html">
+      <div class="b-cat">اختبار ذاتي</div>
+      <h3>5 أسئلة تكشف: أنت في طريقك للحرية المالية أم في الفخ المالي؟</h3>
+      <p>لا تحتاج إلى محاسب لتعرف موقعك المالي الحقيقي. خمس أسئلة صادقة تكفي لمعرفة مسارك الفعلي.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/perfect-plan-paralysis.html">
+      <div class="b-cat">كسر التردد</div>
+      <h3>لماذا تمنعك «الخطة المالية المثالية» من البدء فعلياً؟</h3>
+      <p>تقرأ عن الاستثمار منذ شهور لكنك لم تبدأ بعد؟ هذا الانتظار يكلّفك أكثر من أي خطأ استثماري بسيط.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
+
+    <a class="blog-card" href="blog/what-your-spending-says-about-you.html">
+      <div class="b-cat">مرآة شخصية</div>
+      <h3>ماذا تقول عادات إنفاقك عنك فعلاً؟</h3>
+      <p>كشف حسابك البنكي يكشف عنك أكثر من سيرتك الذاتية. كل دينار تنفقه تصويت على ما تقدّره حقاً.</p>
+      <div class="b-meta">7 دقائق قراءة</div>
+    </a>
 
   </div>
 
@@ -81,5 +224,6 @@
   <span>الإصدار 1 · 2026</span>
 </footer>
 
+<script src="assets/auth.js"></script>
 </body>
 </html>
