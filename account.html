@@ -19,6 +19,7 @@
     <li><a href="about.html">من نحن</a></li>
     <li><a href="services.html">خدماتنا</a></li>
     <li><a href="blog.html">المقالات</a></li>
+    <li><a href="series.html">السلاسل</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
   <span id="authSlot"></span>
@@ -29,7 +30,7 @@
   <div class="page-head">
     <div class="badge">حسابك الشخصي</div>
     <h1>تسجيل الدخول</h1>
-    <p>أنشئ حساباً مجانياً لمتابعة الكتب التي تقرأها وحفظ تقدّمك. ملاحظة: الحساب محفوظ في متصفحك الحالي فقط.</p>
+    <p>أنشئ حساباً مجانياً لمتابعة الكتب التي تقرأها وحفظ تقدّمك. حسابك محفوظ بأمان ويمكنك الوصول إليه من أي جهاز.</p>
   </div>
 
   <div class="auth-tabs">
@@ -41,8 +42,8 @@
 
     <div class="auth-panel show" id="panelLogin">
       <form class="static-card cform" id="loginForm">
-        <label for="lUser">اسم المستخدم</label>
-        <input type="text" id="lUser" autocomplete="username" required>
+        <label for="lEmail">البريد الإلكتروني</label>
+        <input type="email" id="lEmail" autocomplete="email" required>
         <label for="lPass">كلمة المرور</label>
         <input type="password" id="lPass" autocomplete="current-password" required>
         <button type="submit">دخول</button>
@@ -51,9 +52,11 @@
 
     <div class="auth-panel" id="panelRegister">
       <form class="static-card cform" id="registerForm">
+        <label for="rEmail">البريد الإلكتروني</label>
+        <input type="email" id="rEmail" autocomplete="email" required>
         <label for="rUser">اسم المستخدم</label>
         <input type="text" id="rUser" autocomplete="username" required>
-        <label for="rPass">كلمة المرور (4 أحرف على الأقل)</label>
+        <label for="rPass">كلمة المرور (6 أحرف على الأقل)</label>
         <input type="password" id="rPass" autocomplete="new-password" required>
         <button type="submit">إنشاء الحساب</button>
       </form>
@@ -71,6 +74,7 @@
     <a href="about.html">من نحن</a>
     <a href="services.html">خدماتنا</a>
     <a href="blog.html">المقالات</a>
+    <a href="series.html">السلاسل</a>
     <a href="contact.html">تواصل معنا</a>
     <a href="privacy.html">سياسة الخصوصية</a>
     <a href="terms.html">شروط الاستخدام</a>
@@ -82,13 +86,15 @@
 <script src="assets/auth.js"></script>
 <script>
 (function(){
-  if(WL.currentUser()){ location.href = 'myreads.html'; return; }
-
   var tabLogin = document.getElementById('tabLogin');
   var tabRegister = document.getElementById('tabRegister');
   var panelLogin = document.getElementById('panelLogin');
   var panelRegister = document.getElementById('panelRegister');
   var msg = document.getElementById('authMsg');
+
+  WL.ready.then(function(){
+    if(WL.currentUser()){ location.href = 'myreads.html'; }
+  });
 
   function showMsg(text, ok){
     msg.textContent = text;
@@ -108,14 +114,24 @@
 
   document.getElementById('loginForm').addEventListener('submit', function(e){
     e.preventDefault();
-    var r = WL.login(document.getElementById('lUser').value, document.getElementById('lPass').value);
-    if(r.ok){ location.href = 'myreads.html'; } else { showMsg(r.msg, false); }
+    showMsg('...جارٍ تسجيل الدخول', true);
+    WL.login(document.getElementById('lEmail').value, document.getElementById('lPass').value).then(function(r){
+      if(r.ok){ location.href = 'myreads.html'; } else { showMsg(r.msg, false); }
+    });
   });
 
   document.getElementById('registerForm').addEventListener('submit', function(e){
     e.preventDefault();
-    var r = WL.register(document.getElementById('rUser').value, document.getElementById('rPass').value);
-    if(r.ok){ location.href = 'myreads.html'; } else { showMsg(r.msg, false); }
+    showMsg('...جارٍ إنشاء الحساب', true);
+    WL.register(
+      document.getElementById('rEmail').value,
+      document.getElementById('rUser').value,
+      document.getElementById('rPass').value
+    ).then(function(r){
+      if(r.ok && !r.needsConfirm){ location.href = 'myreads.html'; }
+      else if(r.ok && r.needsConfirm){ showMsg(r.msg, true); }
+      else { showMsg(r.msg, false); }
+    });
   });
 })();
 </script>

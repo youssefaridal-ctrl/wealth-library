@@ -19,6 +19,7 @@
     <li><a href="about.html">من نحن</a></li>
     <li><a href="services.html">خدماتنا</a></li>
     <li><a href="blog.html">المقالات</a></li>
+    <li><a href="series.html">السلاسل</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
   <span id="authSlot"></span>
@@ -49,6 +50,7 @@
     <a href="about.html">من نحن</a>
     <a href="services.html">خدماتنا</a>
     <a href="blog.html">المقالات</a>
+    <a href="series.html">السلاسل</a>
     <a href="contact.html">تواصل معنا</a>
     <a href="privacy.html">سياسة الخصوصية</a>
     <a href="terms.html">شروط الاستخدام</a>
@@ -60,41 +62,45 @@
 <script src="assets/auth.js"></script>
 <script>
 (function(){
-  if(!WL.currentUser()){ location.href = 'account.html'; return; }
+  WL.ready.then(function(){
+    if(!WL.currentUser()){ location.href = 'account.html'; return; }
 
-  var s = WL.stats();
-  document.getElementById('statDone').textContent = s.done;
-  document.getElementById('statReading').textContent = s.reading;
-  document.getElementById('statTotal').textContent = s.total;
+    WL.stats().then(function(s){
+      document.getElementById('statDone').textContent = s.done;
+      document.getElementById('statReading').textContent = s.reading;
+      document.getElementById('statTotal').textContent = s.total;
+    });
 
-  var progress = WL.getProgress();
-  var ids = Object.keys(progress);
-  var box = document.getElementById('readsContainer');
+    WL.getProgress().then(function(progress){
+      var ids = Object.keys(progress);
+      var box = document.getElementById('readsContainer');
 
-  if(ids.length === 0){
-    box.innerHTML = '<div class="empty-reads">لم تبدأ أي كتاب بعد. <a href="index.html">تصفّح الفهرس الكامل →</a></div>';
-    return;
-  }
+      if(ids.length === 0){
+        box.innerHTML = '<div class="empty-reads">لم تبدأ أي كتاب بعد. <a href="index.html">تصفّح الفهرس الكامل →</a></div>';
+        return;
+      }
 
-  var grid = document.createElement('div');
-  grid.className = 'reads-grid';
+      var grid = document.createElement('div');
+      grid.className = 'reads-grid';
 
-  ids.forEach(function(id){
-    var book = WL.BOOKS.find(function(b){ return String(b.id) === String(id); });
-    if(!book) return;
-    var st = progress[id].status;
-    var a = document.createElement('a');
-    a.className = 'idx-card done';
-    a.href = book.href;
-    a.innerHTML =
-      '<span class="idx-num">' + String(book.id).padStart(2,'0') + '</span>' +
-      '<div class="idx-t">' + book.title + '</div>' +
-      '<div class="idx-a">' + book.author + '</div>' +
-      '<span class="idx-badge">' + (st === 'done' ? 'مُنهى ✓' : 'قيد القراءة') + '</span>';
-    grid.appendChild(a);
+      ids.forEach(function(id){
+        var book = WL.BOOKS.find(function(b){ return String(b.id) === String(id); });
+        if(!book) return;
+        var st = progress[id].status;
+        var a = document.createElement('a');
+        a.className = 'idx-card done';
+        a.href = book.href;
+        a.innerHTML =
+          '<span class="idx-num">' + String(book.id).padStart(2,'0') + '</span>' +
+          '<div class="idx-t">' + book.title + '</div>' +
+          '<div class="idx-a">' + book.author + '</div>' +
+          '<span class="idx-badge">' + (st === 'done' ? 'مُنهى ✓' : 'قيد القراءة') + '</span>';
+        grid.appendChild(a);
+      });
+
+      box.appendChild(grid);
+    });
   });
-
-  box.appendChild(grid);
 })();
 </script>
 

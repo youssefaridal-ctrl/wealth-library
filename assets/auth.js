@@ -1,6 +1,6 @@
-/* ===== نظام حسابات محلي (بدون خادم) — مكتبة المال والثروة =====
-   تنبيه: هذا تخزين محلي في متصفحك فقط (localStorage)، وليس نظام مصادقة آمن حقيقي.
-   لا تستخدم كلمة مرور تستخدمها في مواقع أخرى. */
+/* ===== نظام حسابات حقيقي (Supabase) — مكتبة المال والثروة =====
+   البريد الإلكتروني وكلمة المرور يُديرهما Supabase (مشفّرة، غير مخزّنة كنص واضح).
+   تقدّم القراءة محفوظ في جدول reading_progress، مرتبط بكل مستخدم عبر RLS. */
 (function(){
   var WL = window.WL = window.WL || {};
 
@@ -107,61 +107,114 @@
 {id:100,title:"العادات السبع للناس الأكثر فعالية",author:"ستيفن كوفي",href:"books/book-100.html"}
   ];
 
-  var USERS_KEY = "wl_users";
-  var SESSION_KEY = "wl_session";
+  /* ===== إعداد Supabase ===== */
+  var SUPABASE_URL = "PUT_PROJECT_URL_HERE";
+  var SUPABASE_ANON_KEY = "PUT_ANON_KEY_HERE";
 
-  function getUsers(){ try{ return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }catch(e){ return {}; } }
-  function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31 + s.charCodeAt(i))|0; } return "h"+h; }
+  var sb = null;
+  function loadSupabaseLib(){
+    return new Promise(function(resolve, reject){
+      if(window.supabase && window.supabase.createClient){ resolve(); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+      s.onload = function(){ resolve(); };
+      s.onerror = function(){ reject(new Error('فشل تحميل مكتبة Supabase')); };
+      document.head.appendChild(s);
+    });
+  }
 
-  WL.currentUser = function(){ return localStorage.getItem(SESSION_KEY) || null; };
+  var sbReady = loadSupabaseLib().then(function(){
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return sb;
+  });
 
-  WL.register = function(username, password){
+  var currentUser = null; /* {id, email, username} */
+
+  function userFromAuthUser(u){
+    if(!u) return null;
+    return { id: u.id, email: u.email, username: (u.user_metadata && u.user_metadata.username) || u.email };
+  }
+
+  WL.ready = sbReady.then(function(){
+    return sb.auth.getSession();
+  }).then(function(res){
+    var session = res.data && res.data.session;
+    currentUser = session ? userFromAuthUser(session.user) : null;
+  }).catch(function(){ currentUser = null; });
+
+  WL.currentUser = function(){ return currentUser ? currentUser.username : null; };
+  WL.currentUserEmail = function(){ return currentUser ? currentUser.email : null; };
+
+  function translateAuthError(err){
+    var m = (err && err.message) || "";
+    if(/already registered|already exists/i.test(m)) return "هذا البريد الإلكتروني مستخدم بالفعل";
+    if(/password/i.test(m) && /6|short|weak/i.test(m)) return "كلمة المرور قصيرة جداً (6 أحرف على الأقل)";
+    if(/invalid login credentials/i.test(m)) return "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+    if(/invalid email/i.test(m)) return "البريد الإلكتروني غير صالح";
+    return "حدث خطأ: " + m;
+  }
+
+  WL.register = function(email, username, password){
+    email = (email||"").trim();
     username = (username||"").trim();
-    if(!username || !password) return {ok:false, msg:"الرجاء إدخال اسم المستخدم وكلمة المرور"};
-    if(password.length < 4) return {ok:false, msg:"كلمة المرور قصيرة جداً (4 أحرف على الأقل)"};
-    var users = getUsers();
-    if(users[username]) return {ok:false, msg:"اسم المستخدم مستخدم بالفعل"};
-    users[username] = { pass: hash(password), createdAt: Date.now() };
-    saveUsers(users);
-    localStorage.setItem(SESSION_KEY, username);
-    return {ok:true};
+    if(!email || !username || !password) return Promise.resolve({ok:false, msg:"الرجاء تعبئة البريد الإلكتروني واسم المستخدم وكلمة المرور"});
+    if(password.length < 6) return Promise.resolve({ok:false, msg:"كلمة المرور قصيرة جداً (6 أحرف على الأقل)"});
+    return sbReady.then(function(){
+      return sb.auth.signUp({ email: email, password: password, options: { data: { username: username } } });
+    }).then(function(res){
+      if(res.error) return {ok:false, msg: translateAuthError(res.error)};
+      if(res.data && res.data.user && !res.data.session){
+        return {ok:true, needsConfirm:true, msg:"تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتأكيد التسجيل قبل تسجيل الدخول."};
+      }
+      currentUser = userFromAuthUser(res.data.user);
+      return {ok:true};
+    });
   };
 
-  WL.login = function(username, password){
-    username = (username||"").trim();
-    var users = getUsers();
-    var u = users[username];
-    if(!u || u.pass !== hash(password)) return {ok:false, msg:"اسم المستخدم أو كلمة المرور غير صحيحة"};
-    localStorage.setItem(SESSION_KEY, username);
-    return {ok:true};
+  WL.login = function(email, password){
+    email = (email||"").trim();
+    return sbReady.then(function(){
+      return sb.auth.signInWithPassword({ email: email, password: password });
+    }).then(function(res){
+      if(res.error) return {ok:false, msg: translateAuthError(res.error)};
+      currentUser = userFromAuthUser(res.data.user);
+      return {ok:true};
+    });
   };
 
-  WL.logout = function(){ localStorage.removeItem(SESSION_KEY); };
-
-  function progressKey(user){ return "wl_progress_" + user; }
+  WL.logout = function(){
+    return sbReady.then(function(){ return sb.auth.signOut(); }).then(function(){ currentUser = null; });
+  };
 
   WL.getProgress = function(){
-    var user = WL.currentUser();
-    if(!user) return {};
-    try{ return JSON.parse(localStorage.getItem(progressKey(user))) || {}; }catch(e){ return {}; }
+    if(!currentUser) return Promise.resolve({});
+    return sbReady.then(function(){
+      return sb.from('reading_progress').select('book_id,status').eq('user_id', currentUser.id);
+    }).then(function(res){
+      var p = {};
+      (res.data || []).forEach(function(row){ p[row.book_id] = { status: row.status }; });
+      return p;
+    });
   };
 
   WL.setBookStatus = function(bookId, status){
-    var user = WL.currentUser();
-    if(!user) return false;
-    var p = WL.getProgress();
-    if(status === null){ delete p[bookId]; }
-    else { p[bookId] = { status: status, updatedAt: Date.now() }; }
-    localStorage.setItem(progressKey(user), JSON.stringify(p));
-    return true;
+    if(!currentUser) return Promise.resolve(false);
+    return sbReady.then(function(){
+      if(status === null){
+        return sb.from('reading_progress').delete().eq('user_id', currentUser.id).eq('book_id', Number(bookId));
+      }
+      return sb.from('reading_progress').upsert({
+        user_id: currentUser.id, book_id: Number(bookId), status: status, updated_at: new Date().toISOString()
+      });
+    }).then(function(){ return true; });
   };
 
   WL.stats = function(){
-    var p = WL.getProgress();
-    var done=0, reading=0;
-    Object.keys(p).forEach(function(k){ if(p[k].status==='done') done++; else if(p[k].status==='reading') reading++; });
-    return {done:done, reading:reading, total:WL.BOOKS.length};
+    return WL.getProgress().then(function(p){
+      var done=0, reading=0;
+      Object.keys(p).forEach(function(k){ if(p[k].status==='done') done++; else if(p[k].status==='reading') reading++; });
+      return {done:done, reading:reading, total:WL.BOOKS.length};
+    });
   };
 
   /* ===== رسم واجهة الحساب في شريط التنقّل ===== */
@@ -176,7 +229,7 @@
         '<span class="auth-user">'+user+'</span>' +
         '<button type="button" class="auth-logout" id="wlLogoutBtn">خروج</button>';
       var btn = document.getElementById('wlLogoutBtn');
-      if(btn) btn.addEventListener('click', function(){ WL.logout(); location.reload(); });
+      if(btn) btn.addEventListener('click', function(){ WL.logout().then(function(){ location.reload(); }); });
     } else {
       slot.innerHTML = '<a href="'+root+'account.html" class="auth-link auth-cta">تسجيل الدخول</a>';
     }
@@ -191,16 +244,17 @@
       el.innerHTML = '<a href="'+root+'account.html" class="auth-link">سجّل الدخول لمتابعة قراءتك</a>';
       return;
     }
-    var p = WL.getProgress();
-    var st = p[id] ? p[id].status : null;
-    el.innerHTML =
-      '<button type="button" data-st="reading" class="'+(st==='reading'?'active':'')+'">قيد القراءة</button>' +
-      '<button type="button" data-st="done" class="'+(st==='done'?'active':'')+'">أنهيت القراءة ✓</button>';
-    Array.prototype.forEach.call(el.querySelectorAll('button'), function(b){
-      b.addEventListener('click', function(){
-        var newSt = b.getAttribute('data-st');
-        WL.setBookStatus(id, st === newSt ? null : newSt);
-        renderReadStatus();
+    el.innerHTML = '<span class="auth-link">...جارٍ التحميل</span>';
+    WL.getProgress().then(function(p){
+      var st = p[id] ? p[id].status : null;
+      el.innerHTML =
+        '<button type="button" data-st="reading" class="'+(st==='reading'?'active':'')+'">قيد القراءة</button>' +
+        '<button type="button" data-st="done" class="'+(st==='done'?'active':'')+'">أنهيت القراءة ✓</button>';
+      Array.prototype.forEach.call(el.querySelectorAll('button'), function(b){
+        b.addEventListener('click', function(){
+          var newSt = b.getAttribute('data-st');
+          WL.setBookStatus(id, st === newSt ? null : newSt).then(function(){ renderReadStatus(); });
+        });
       });
     });
   }
@@ -229,8 +283,10 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    renderAuthSlot();
-    renderReadStatus();
     setupMobileNav();
+    WL.ready.then(function(){
+      renderAuthSlot();
+      renderReadStatus();
+    });
   });
 })();
